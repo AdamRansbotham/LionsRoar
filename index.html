@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <title>The Lions Roar — Flipbook</title>
 
-  <!-- Load jQuery FIRST -->
+  <!-- jQuery (must load first) -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- Load working version of turn.js -->
-  <script src="https://cdn.jsdelivr.net/gh/blasten/turn.js@master/lib/turn.js"></script>
+  <!-- Turn.js (hosted working version) -->
+  <script src="https://cdn.jsdelivr.net/npm/turn.js@4/turn.min.js"></script>
 
   <style>
     body {
@@ -32,14 +32,17 @@
       width: 800px;
       height: 500px;
       margin: 0 auto;
+      display: none; /* Hide until loaded */
     }
 
-    #flipbook .page {
+    .page {
       width: 400px;
       height: 500px;
+      background: white;
+      overflow: hidden;
     }
 
-    #flipbook img {
+    .page img {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -57,35 +60,37 @@
     <option value="volume2/issue1">Volume 2 — Issue 1</option>
   </select>
 
-  <div id="flipbook">
-    <!-- Pages will be loaded here -->
-  </div>
+  <div id="flipbook"></div>
 
   <script>
     function loadIssue(path) {
-      const numPages = 6; // Change this if issues have more/fewer pages
+      const numPages = 6;
       const flipbook = $('#flipbook');
-      flipbook.html(''); // Clear previous pages
 
-      // Load each page as a .jpg from GitHub raw content
-      for (let i = 1; i <= numPages; i++) {
-        const pageUrl = `https://raw.githubusercontent.com/AdamRansbotham/LionsRoar/main/papers/${path}/page${i}.jpg`;
-        flipbook.append(`<div class="page"><img src="${pageUrl}" alt="Page ${i}"></div>`);
+      // Clear and hide previous content
+      if (flipbook.data('turn')) {
+        flipbook.turn('destroy').html('').hide();
+      } else {
+        flipbook.html('').hide();
       }
 
-      // Wait for DOM to render, then initialize turn.js
-      setTimeout(() => {
-        if (flipbook.data('turn')) {
-          flipbook.turn('destroy');
-        }
+      // Load new pages
+      for (let i = 1; i <= numPages; i++) {
+        const imgURL = `https://raw.githubusercontent.com/AdamRansbotham/LionsRoar/main/papers/${path}/page${i}.jpg`;
+        flipbook.append(`<div class="page"><img src="${imgURL}" alt="Page ${i}"></div>`);
+      }
 
-        flipbook.turn({
+      // Wait for images to load into DOM
+      setTimeout(() => {
+        flipbook.show().turn({
           width: 800,
           height: 500,
           autoCenter: true,
           display: 'double',
+          acceleration: true,
+          gradients: true
         });
-      }, 100); // short delay to let images load into DOM
+      }, 100); // Let DOM update before initializing
     }
   </script>
 
