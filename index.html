@@ -60,45 +60,46 @@
   </div>
 
   <script>
-    function loadIssue(path) {
-      const numPages = 6; // Adjust this if each issue has more/fewer pages
-      const flipbook = $('#flipbook');
-      flipbook.html(''); // Clear previous pages
-
-      // Create an array of pages, each containing a pair of images
-      const pages = [];
-      for (let i = 1; i <= numPages; i += 2) {
-        let pageHTML = `<div class="flipbook-wrapper">`;
-        pageHTML += `<div><img src="https://raw.githubusercontent.com/AdamRansbotham/LionsRoar/main/papers/${path}/page${i}.jpg" alt="Page ${i}"></div>`;
-        if (i + 1 <= numPages) {
-          pageHTML += `<div><img src="https://raw.githubusercontent.com/AdamRansbotham/LionsRoar/main/papers/${path}/page${i + 1}.jpg" alt="Page ${i + 1}"></div>`;
-        }
-        pageHTML += `</div>`;
-        pages.push(pageHTML);
-      }
-
-      // Append all pages to the flipbook
-      pages.forEach(page => {
-        flipbook.append(page);
-      });
-
-      // Destroy and re-initialize flipbook
-      if (flipbook.data('turn')) {
-        flipbook.turn('destroy');
-      }
-
-      flipbook.turn({
-        width: 1200,  // Set the width to show two pages at once
-        height: 500,
-        autoCenter: true,
-        display: 'double',  // Show two pages at a time
-        next: $('#next'),
-        previous: $('#previous')
-      });
-    }
-
+    // Wait for the document to be ready
     $(document).ready(function() {
-      // Optional: You can also load the first issue by default if needed
+      
+      // Function to load the selected issue
+      function loadIssue(path) {
+        const numPages = 6; // Adjust this if each issue has more/fewer pages
+        const flipbook = $('#flipbook');
+        flipbook.html(''); // Clear previous pages
+
+        // Create an array of pages, each containing a pair of images
+        const pages = [];
+        for (let i = 1; i <= numPages; i += 2) {
+          let pageHTML = `<div class="flipbook-wrapper">`;
+          pageHTML += `<div><img src="https://raw.githubusercontent.com/AdamRansbotham/LionsRoar/main/papers/${path}/page${i}.jpg" alt="Page ${i}"></div>`;
+          if (i + 1 <= numPages) {
+            pageHTML += `<div><img src="https://raw.githubusercontent.com/AdamRansbotham/LionsRoar/main/papers/${path}/page${i + 1}.jpg" alt="Page ${i + 1}"></div>`;
+          }
+          pageHTML += `</div>`;
+          pages.push(pageHTML);
+        }
+
+        // Append all pages to the flipbook
+        pages.forEach(page => {
+          flipbook.append(page);
+        });
+
+        // Destroy and re-initialize flipbook
+        if (flipbook.data('turn')) {
+          flipbook.turn('destroy');
+        }
+
+        flipbook.turn({
+          width: 1200,  // Set the width to show two pages at once
+          height: 500,
+          autoCenter: true,
+          display: 'double' // Show two pages at a time
+        });
+      }
+
+      // Optional: Load the first issue by default
       // loadIssue('volume1/issue1');
     });
   </script>
