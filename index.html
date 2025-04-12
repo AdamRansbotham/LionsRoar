@@ -56,26 +56,33 @@
   </div>
 
   <script>
-    function loadIssue(path) {
-      const numPages = 6; // Adjust this if each issue has more/fewer pages
-      const flipbook = $('#flipbook');
-      flipbook.html(''); // Clear previous pages
+    // Ensure jQuery and Turn.js are loaded before executing the script
+    $(document).ready(function() {
+      function loadIssue(path) {
+        const numPages = 6; // Adjust this if each issue has more/fewer pages
+        const flipbook = $('#flipbook');
+        flipbook.html(''); // Clear previous pages
 
-      for (let i = 1; i <= numPages; i++) {
-        flipbook.append(`<div><img src="papers/${path}/page${i}.jpg" alt="Page ${i}"></div>`);
+        for (let i = 1; i <= numPages; i++) {
+          // Ensure images are correctly referenced within the repository
+          flipbook.append(`<div><img src="papers/${path}/page${i}.jpg" alt="Page ${i}"></div>`);
+        }
+
+        // Destroy and re-initialize flipbook
+        if (flipbook.data('turn')) {
+          flipbook.turn('destroy');
+        }
+
+        flipbook.turn({
+          width: 800,
+          height: 500,
+          autoCenter: true
+        });
       }
 
-      // Destroy and re-initialize flipbook
-      if (flipbook.data('turn')) {
-        flipbook.turn('destroy');
-      }
-
-      flipbook.turn({
-        width: 800,
-        height: 500,
-        autoCenter: true
-      });
-    }
+      // Optional: Load the first issue by default if desired
+      // loadIssue('volume1/issue1');
+    });
   </script>
 
 </body>
