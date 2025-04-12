@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <title>Newspaper Flipbook</title>
 
-  <!-- Turn.js CDN -->
+  <!-- Load jQuery and turn.js in correct order -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/blasten/turn.js@master/lib/turn.min.js"></script>
 
   <style>
     body {
@@ -27,7 +27,7 @@
     }
 
     #flipbook {
-      width: 1200px;
+      width: 800px;
       height: 500px;
       margin: 0 auto;
     }
@@ -37,46 +37,10 @@
       height: 100%;
       object-fit: cover;
     }
-
-    .flipbook-wrapper {
-      display: flex;
-    }
-
-    .flipbook-wrapper > div {
-      width: 50%;
-    }
   </style>
 </head>
 <body>
-  <script>
-    function loadIssue(path) {
-      const numPages = 6; // Change if issues have different page counts
-      const flipbook = $('#flipbook');
-      flipbook.html(''); // Clear old pages
 
-      for (let i = 1; i <= numPages; i += 2) {
-        let html = `<div class="flipbook-wrapper">`;
-        html += `<div><img src="https://raw.githubusercontent.com/AdamRansbotham/LionsRoar/main/papers/${path}/page${i}.jpg" alt="Page ${i}"></div>`;
-        if (i + 1 <= numPages) {
-          html += `<div><img src="https://raw.githubusercontent.com/AdamRansbotham/LionsRoar/main/papers/${path}/page${i + 1}.jpg" alt="Page ${i + 1}"></div>`;
-        }
-        html += `</div>`;
-        flipbook.append(html);
-      }
-
-      // Re-initialize turn.js
-      if (flipbook.data('turn')) {
-        flipbook.turn('destroy');
-      }
-
-      flipbook.turn({
-        width: 1200,
-        height: 500,
-        autoCenter: true,
-        display: 'double'
-      });
-    }
-  </script>
   <h1>📖 The Lions Roar — Flipbook Archive</h1>
 
   <select onchange="loadIssue(this.value)">
@@ -90,7 +54,28 @@
     <!-- Pages will be loaded here -->
   </div>
 
-  
+  <script>
+    function loadIssue(path) {
+      const numPages = 6; // Change this if issues have more/fewer pages
+      const flipbook = $('#flipbook');
+      flipbook.html(''); // Clear previous pages
+
+      for (let i = 1; i <= numPages; i++) {
+        flipbook.append(`<div><img src="https://raw.githubusercontent.com/AdamRansbotham/LionsRoar/main/papers/${path}/page${i}.jpg" alt="Page ${i}"></div>`);
+      }
+
+      if (flipbook.data('turn')) {
+        flipbook.turn('destroy');
+      }
+
+      flipbook.turn({
+        width: 800,
+        height: 500,
+        autoCenter: true,
+        display: 'double'
+      });
+    }
+  </script>
 
 </body>
 </html>
