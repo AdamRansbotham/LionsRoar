@@ -56,35 +56,37 @@
   </div>
 
   <script>
-    $(document).ready(function() {
-      function loadIssue(path) {
-        const numPages = 6; // Adjust this if each issue has more/fewer pages
-        const flipbook = $('#flipbook');
-        flipbook.html(''); // Clear previous pages
+    // Move the function definition outside of $(document).ready()
+    function loadIssue(path) {
+      const numPages = 6; // Adjust this if each issue has more/fewer pages
+      const flipbook = $('#flipbook');
+      flipbook.html(''); // Clear previous pages
 
-        // Debugging: Output the path
-        console.log(`Loading issue from: ${path}`);
+      // Debugging: Output the path
+      console.log(`Loading issue from: ${path}`);
 
-        // Load images from the selected issue
-        for (let i = 1; i <= numPages; i++) {
-          const imgPath = `https://raw.githubusercontent.com/AdamRansbotham/LionsRoar/main/papers/${path}/page${i}.jpg`;
-          console.log(`Loading image: ${imgPath}`); // Debugging output
+      // Load images from the selected issue
+      for (let i = 1; i <= numPages; i++) {
+        const imgPath = `https://raw.githubusercontent.com/AdamRansbotham/LionsRoar/main/papers/${path}/page${i}.jpg`;
+        console.log(`Loading image: ${imgPath}`); // Debugging output
 
-          flipbook.append(`<div><img src="${imgPath}" alt="Page ${i}"></div>`);
-        }
-
-        // Destroy and re-initialize flipbook
-        if (flipbook.data('turn')) {
-          flipbook.turn('destroy');
-        }
-
-        flipbook.turn({
-          width: 800,
-          height: 500,
-          autoCenter: true
-        });
+        flipbook.append(`<div><img src="${imgPath}" alt="Page ${i}"></div>`);
       }
 
+      // Destroy and re-initialize flipbook
+      if (flipbook.data('turn')) {
+        flipbook.turn('destroy');
+      }
+
+      flipbook.turn({
+        width: 800,
+        height: 500,
+        autoCenter: true
+      });
+    }
+
+    // Ensure jQuery and Turn.js are loaded before executing the script
+    $(document).ready(function() {
       // Optional: Load the first issue by default if desired
       // loadIssue('volume1/issue1');
     });
