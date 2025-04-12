@@ -27,19 +27,23 @@
     }
 
     #flipbook {
-      width: 1200px;  /* Adjust width for two pages side by side */
+      width: 1200px;
       height: 500px;
       margin: 0 auto;
     }
 
     #flipbook img {
-      width: 50%;  /* Ensure each page takes half of the container width */
+      width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
     .flipbook-wrapper {
       display: flex;
+    }
+
+    .flipbook-wrapper > div {
+      width: 50%;
     }
   </style>
 </head>
@@ -52,7 +56,6 @@
     <option value="volume1/issue1">Volume 1 — Issue 1</option>
     <option value="volume1/issue2">Volume 1 — Issue 2</option>
     <option value="volume2/issue1">Volume 2 — Issue 1</option>
-    <!-- Add more here -->
   </select>
 
   <div id="flipbook">
@@ -60,48 +63,33 @@
   </div>
 
   <script>
-    // Wait for the document to be ready
-    $(document).ready(function() {
-      
-      // Function to load the selected issue
-      function loadIssue(path) {
-        const numPages = 6; // Adjust this if each issue has more/fewer pages
-        const flipbook = $('#flipbook');
-        flipbook.html(''); // Clear previous pages
+    function loadIssue(path) {
+      const numPages = 6; // Change if issues have different page counts
+      const flipbook = $('#flipbook');
+      flipbook.html(''); // Clear old pages
 
-        // Create an array of pages, each containing a pair of images
-        const pages = [];
-        for (let i = 1; i <= numPages; i += 2) {
-          let pageHTML = `<div class="flipbook-wrapper">`;
-          pageHTML += `<div><img src="https://raw.githubusercontent.com/AdamRansbotham/LionsRoar/main/papers/${path}/page${i}.jpg" alt="Page ${i}"></div>`;
-          if (i + 1 <= numPages) {
-            pageHTML += `<div><img src="https://raw.githubusercontent.com/AdamRansbotham/LionsRoar/main/papers/${path}/page${i + 1}.jpg" alt="Page ${i + 1}"></div>`;
-          }
-          pageHTML += `</div>`;
-          pages.push(pageHTML);
+      for (let i = 1; i <= numPages; i += 2) {
+        let html = `<div class="flipbook-wrapper">`;
+        html += `<div><img src="https://raw.githubusercontent.com/AdamRansbotham/LionsRoar/main/papers/${path}/page${i}.jpg" alt="Page ${i}"></div>`;
+        if (i + 1 <= numPages) {
+          html += `<div><img src="https://raw.githubusercontent.com/AdamRansbotham/LionsRoar/main/papers/${path}/page${i + 1}.jpg" alt="Page ${i + 1}"></div>`;
         }
-
-        // Append all pages to the flipbook
-        pages.forEach(page => {
-          flipbook.append(page);
-        });
-
-        // Destroy and re-initialize flipbook
-        if (flipbook.data('turn')) {
-          flipbook.turn('destroy');
-        }
-
-        flipbook.turn({
-          width: 1200,  // Set the width to show two pages at once
-          height: 500,
-          autoCenter: true,
-          display: 'double' // Show two pages at a time
-        });
+        html += `</div>`;
+        flipbook.append(html);
       }
 
-      // Optional: Load the first issue by default
-      // loadIssue('volume1/issue1');
-    });
+      // Re-initialize turn.js
+      if (flipbook.data('turn')) {
+        flipbook.turn('destroy');
+      }
+
+      flipbook.turn({
+        width: 1200,
+        height: 500,
+        autoCenter: true,
+        display: 'double'
+      });
+    }
   </script>
 
 </body>
