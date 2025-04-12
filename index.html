@@ -2,15 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Lions Roar – Flipbook PDF</title>
-
-  <!-- jQuery + Turn.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/turn.js@4/turn.min.js"></script>
-
-  <!-- PDF.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
-
+  <title>Lions Roar Flipbook</title>
   <style>
     body {
       font-family: sans-serif;
@@ -38,6 +30,8 @@
     .page {
       width: 400px;
       height: 500px;
+      background-color: white;
+      overflow: hidden;
     }
 
     canvas {
@@ -45,61 +39,65 @@
       height: 100%;
     }
   </style>
+
+  <!-- jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+  <!-- Turn.js -->
+  <script src="https://cdn.jsdelivr.net/npm/turn.js@4/turn.min.js"></script>
+
+  <!-- PDF.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
 </head>
 <body>
   <h1>📖 The Lions Roar — Flipbook Archive</h1>
 
   <select onchange="loadIssue(this.value)">
     <option value="">Select Volume & Issue</option>
-    <option value="volume1/issue1.pdf">Volume 1 — Issue 1</option>
-    <option value="volume1/issue2.pdf">Volume 1 — Issue 2</option>
-    <!-- Add more PDF issues here -->
+    <option value="papers/volume1/issue1.pdf">Volume 1 — Issue 1</option>
+    <option value="papers/volume1/issue2.pdf">Volume 1 — Issue 2</option>
   </select>
 
   <div id="flipbook"></div>
 
   <script>
     async function loadIssue(pdfPath) {
+      if (!pdfPath) return;
+
       const flipbook = $('#flipbook');
-      flipbook.html('');
+      flipbook.html(''); // Clear existing content
 
-      // Load the PDF
-      const loadingTask = pdfjsLib.getDocument('papers/' + pdfPath);
+      if (flipbook.data('turn')) {
+        flipbook.turn('destroy').remove();
+        flipbook.replaceWith('<div id="flipbook"></div>');
+      }
+
+      const loadingTask = pdfjsLib.getDocument(pdfPath);
       const pdf = await loadingTask.promise;
+      const pageCount = pdf.numPages;
 
-      // Render all pages
-      for (let i = 1; i <= pdf.numPages; i++) {
+      const container = $('#flipbook');
+
+      for (let i = 1; i <= pageCount; i++) {
         const page = await pdf.getPage(i);
-
-        // Create a canvas element for the page
+        const viewport = page.getViewport({ scale: 2 });
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
-        const viewport = page.getViewport({ scale: 2 });
 
         canvas.width = viewport.width;
         canvas.height = viewport.height;
 
-        await page.render({
-          canvasContext: context,
-          viewport: viewport
-        }).promise;
+        await page.render({ canvasContext: context, viewport }).promise;
 
-        const pageDiv = document.createElement('div');
-        pageDiv.className = 'page';
-        pageDiv.appendChild(canvas);
-        flipbook.append(pageDiv);
+        const pageDiv = $('<div class="page"></div>').append(canvas);
+        container.append(pageDiv);
       }
 
-      // Initialize the flipbook
-      if (flipbook.data('turn')) {
-        flipbook.turn('destroy');
-      }
-
-      flipbook.turn({
+      $('#flipbook').turn({
         width: 800,
         height: 500,
         autoCenter: true,
-        display: 'double'
+        display: 'double',
       });
     }
   </script>
