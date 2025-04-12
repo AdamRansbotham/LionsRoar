@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Newspaper Flipbook</title>
+  <meta charset="UTF-8" />
+  <title>The Lions Roar — Flipbook</title>
 
-  <!-- Load jQuery and turn.js in correct order -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/blasten/turn.js@master/lib/turn.min.js"></script>
+  <!-- Load jQuery FIRST -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Load working version of turn.js -->
+  <script src="https://cdn.jsdelivr.net/gh/blasten/turn.js@master/lib/turn.js"></script>
 
   <style>
     body {
@@ -30,6 +32,11 @@
       width: 800px;
       height: 500px;
       margin: 0 auto;
+    }
+
+    #flipbook .page {
+      width: 400px;
+      height: 500px;
     }
 
     #flipbook img {
@@ -60,20 +67,25 @@
       const flipbook = $('#flipbook');
       flipbook.html(''); // Clear previous pages
 
+      // Load each page as a .jpg from GitHub raw content
       for (let i = 1; i <= numPages; i++) {
-        flipbook.append(`<div><img src="https://raw.githubusercontent.com/AdamRansbotham/LionsRoar/main/papers/${path}/page${i}.jpg" alt="Page ${i}"></div>`);
+        const pageUrl = `https://raw.githubusercontent.com/AdamRansbotham/LionsRoar/main/papers/${path}/page${i}.jpg`;
+        flipbook.append(`<div class="page"><img src="${pageUrl}" alt="Page ${i}"></div>`);
       }
 
-      if (flipbook.data('turn')) {
-        flipbook.turn('destroy');
-      }
+      // Wait for DOM to render, then initialize turn.js
+      setTimeout(() => {
+        if (flipbook.data('turn')) {
+          flipbook.turn('destroy');
+        }
 
-      flipbook.turn({
-        width: 800,
-        height: 500,
-        autoCenter: true,
-        display: 'double'
-      });
+        flipbook.turn({
+          width: 800,
+          height: 500,
+          autoCenter: true,
+          display: 'double',
+        });
+      }, 100); // short delay to let images load into DOM
     }
   </script>
 
