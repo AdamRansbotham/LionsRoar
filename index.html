@@ -27,15 +27,19 @@
     }
 
     #flipbook {
-      width: 800px;
+      width: 1200px;  /* Adjust width for two pages side by side */
       height: 500px;
       margin: 0 auto;
     }
 
     #flipbook img {
-      width: 100%;
+      width: 50%;  /* Ensure each page takes half of the container width */
       height: 100%;
       object-fit: cover;
+    }
+
+    .flipbook-wrapper {
+      display: flex;
     }
   </style>
 </head>
@@ -56,22 +60,27 @@
   </div>
 
   <script>
-    // Define the function globally
     function loadIssue(path) {
       const numPages = 6; // Adjust this if each issue has more/fewer pages
       const flipbook = $('#flipbook');
       flipbook.html(''); // Clear previous pages
 
-      // Debugging: Output the path
-      console.log(`Loading issue from: ${path}`);
-
-      // Load images from the selected issue
-      for (let i = 1; i <= numPages; i++) {
-        const imgPath = `https://raw.githubusercontent.com/AdamRansbotham/LionsRoar/main/papers/${path}/page${i}.jpg`;
-        console.log(`Loading image: ${imgPath}`); // Debugging output
-
-        flipbook.append(`<div><img src="${imgPath}" alt="Page ${i}"></div>`);
+      // Create an array of pages, each containing a pair of images
+      const pages = [];
+      for (let i = 1; i <= numPages; i += 2) {
+        let pageHTML = `<div class="flipbook-wrapper">`;
+        pageHTML += `<div><img src="https://raw.githubusercontent.com/AdamRansbotham/LionsRoar/main/papers/${path}/page${i}.jpg" alt="Page ${i}"></div>`;
+        if (i + 1 <= numPages) {
+          pageHTML += `<div><img src="https://raw.githubusercontent.com/AdamRansbotham/LionsRoar/main/papers/${path}/page${i + 1}.jpg" alt="Page ${i + 1}"></div>`;
+        }
+        pageHTML += `</div>`;
+        pages.push(pageHTML);
       }
+
+      // Append all pages to the flipbook
+      pages.forEach(page => {
+        flipbook.append(page);
+      });
 
       // Destroy and re-initialize flipbook
       if (flipbook.data('turn')) {
@@ -79,16 +88,18 @@
       }
 
       flipbook.turn({
-        width: 800,
+        width: 1200,  // Set the width to show two pages at once
         height: 500,
-        autoCenter: true
+        autoCenter: true,
+        display: 'double',  // Show two pages at a time
+        next: $('#next'),
+        previous: $('#previous')
       });
     }
 
-    // Optional: You can also bind this to the select element using jQuery if needed
     $(document).ready(function() {
-      // Make sure the function is available at page load
-      console.log("Page Loaded: loadIssue is available");
+      // Optional: You can also load the first issue by default if needed
+      // loadIssue('volume1/issue1');
     });
   </script>
 
