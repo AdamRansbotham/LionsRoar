@@ -56,7 +56,7 @@
   </div>
 
   <script>
-    // Move the function definition outside of $(document).ready()
+    // Define the function globally
     function loadIssue(path) {
       const numPages = 6; // Adjust this if each issue has more/fewer pages
       const flipbook = $('#flipbook');
@@ -85,10 +85,10 @@
       });
     }
 
-    // Ensure jQuery and Turn.js are loaded before executing the script
+    // Optional: You can also bind this to the select element using jQuery if needed
     $(document).ready(function() {
-      // Optional: Load the first issue by default if desired
-      // loadIssue('volume1/issue1');
+      // Make sure the function is available at page load
+      console.log("Page Loaded: loadIssue is available");
     });
   </script>
 
