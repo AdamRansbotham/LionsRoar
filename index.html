@@ -1,52 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Turn.js Test</title>
-
-  <!-- jQuery must come first -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <!-- Known working version of Turn.js -->
-  <script src="https://cdn.jsdelivr.net/gh/blasten/turn.js@4/turn.min.js"></script>
-
+  <meta charset="UTF-8" />
+  <title>Lions Roar — Simple Flipbook</title>
   <style>
+    body {
+      font-family: sans-serif;
+      background: #f5f5f5;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
     #flipbook {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       width: 800px;
       height: 500px;
-      margin: 50px auto;
-    }
-
-    #flipbook .page {
-      width: 400px;
-      height: 500px;
+      margin: 0 auto 20px;
       background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      overflow: hidden;
     }
 
-    #flipbook .page img {
+    .page {
+      width: 400px;
+      height: 100%;
+    }
+
+    .page img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 10px;
     }
   </style>
 </head>
 <body>
 
+  <h1>📖 The Lions Roar — Flipbook</h1>
+
+  <select id="issueSelect">
+    <option value="">Select Volume & Issue</option>
+    <option value="volume1/issue1">Volume 1 — Issue 1</option>
+    <option value="volume1/issue2">Volume 1 — Issue 2</option>
+    <option value="volume2/issue1">Volume 2 — Issue 1</option>
+  </select>
+
   <div id="flipbook">
-    <div class="page"><img src="https://via.placeholder.com/400x500?text=Page1"></div>
-    <div class="page"><img src="https://via.placeholder.com/400x500?text=Page2"></div>
-    <div class="page"><img src="https://via.placeholder.com/400x500?text=Page3"></div>
-    <div class="page"><img src="https://via.placeholder.com/400x500?text=Page4"></div>
+    <div class="page" id="leftPage"></div>
+    <div class="page" id="rightPage"></div>
+  </div>
+
+  <div>
+    <button onclick="prevPages()">⬅ Prev</button>
+    <button onclick="nextPages()">Next ➡</button>
   </div>
 
   <script>
-    $('#flipbook').next({
-      width: 800,
-      height: 500,
-      autoCenter: true,
-      display: 'double'
+    let currentPage = 0;
+    let numPages = 6;
+    let issuePath = "";
+    
+    document.getElementById("issueSelect").addEventListener("change", function () {
+      issuePath = this.value;
+      currentPage = 0;
+      showPages();
     });
-  </script>
 
+    function showPages() {
+      const left = document.getElementById("leftPage");
+      const right = document.getElementById("rightPage");
+
+      if (!issuePath) {
+        left.innerHTML = "";
+        right.innerHTML = "";
+        return;
+      }
+
+      const page1 = currentPage + 1;
+      const page2 = currentPage + 2;
+
+      left.innerHTML = page1 <= numPages ? `<img src="papers/${issuePath}/page${page1}.jpg" alt="Page ${page1}">` : "";
+      right.innerHTML = page2 <= numPages ? `<img src="papers/${issuePath}/page${page2}.jpg" alt="Page ${page2}">` : "";
+    }
+
+    function nextPages() {
+      if (currentPage + 2 < numPages) {
+        currentPage += 2;
+        showPages();
+      }
+    }
+
+    function prevPages() {
+      if (currentPage - 2 >= 0) {
+        currentPage -= 2;
+        showPages();
+      }
+    }
+  </script>
 </body>
 </html>
