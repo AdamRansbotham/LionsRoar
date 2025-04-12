@@ -56,16 +56,21 @@
   </div>
 
   <script>
-    // Ensure jQuery and Turn.js are loaded before executing the script
     $(document).ready(function() {
       function loadIssue(path) {
         const numPages = 6; // Adjust this if each issue has more/fewer pages
         const flipbook = $('#flipbook');
         flipbook.html(''); // Clear previous pages
 
+        // Debugging: Output the path
+        console.log(`Loading issue from: ${path}`);
+
+        // Load images from the selected issue
         for (let i = 1; i <= numPages; i++) {
-          // Ensure images are correctly referenced within the repository
-          flipbook.append(`<div><img src="papers/${path}/page${i}.jpg" alt="Page ${i}"></div>`);
+          const imgPath = `https://raw.githubusercontent.com/AdamRansbotham/LionsRoar/main/papers/${path}/page${i}.jpg`;
+          console.log(`Loading image: ${imgPath}`); // Debugging output
+
+          flipbook.append(`<div><img src="${imgPath}" alt="Page ${i}"></div>`);
         }
 
         // Destroy and re-initialize flipbook
