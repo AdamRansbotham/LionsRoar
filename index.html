@@ -1,48 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>The Lions Roar — Flipbook</title>
+  <meta charset="UTF-8">
+  <title>Turn.js Test</title>
 
-  <!-- jQuery (must load first) -->
+  <!-- jQuery must come first -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- Turn.js (hosted working version) -->
-  <script src="https://cdn.jsdelivr.net/npm/turn.js@4/turn.min.js"></script>
+  <!-- Known working version of Turn.js -->
+  <script src="https://cdn.jsdelivr.net/gh/blasten/turn.js@4/turn.min.js"></script>
 
   <style>
-    body {
-      font-family: sans-serif;
-      text-align: center;
-      background-color: #f5f5f5;
-      padding: 40px;
-    }
-
-    h1 {
-      margin-bottom: 20px;
-    }
-
-    select {
-      padding: 10px;
-      font-size: 16px;
-      margin-bottom: 30px;
-    }
-
     #flipbook {
       width: 800px;
       height: 500px;
-      margin: 0 auto;
-      display: none; /* Hide until loaded */
+      margin: 50px auto;
     }
 
-    .page {
+    #flipbook .page {
       width: 400px;
       height: 500px;
       background: white;
-      overflow: hidden;
     }
 
-    .page img {
+    #flipbook .page img {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -51,48 +32,20 @@
 </head>
 <body>
 
-  <h1>📖 The Lions Roar — Flipbook Archive</h1>
-
-  <select onchange="loadIssue(this.value)">
-    <option value="">Select Volume & Issue</option>
-    <option value="volume1/issue1">Volume 1 — Issue 1</option>
-    <option value="volume1/issue2">Volume 1 — Issue 2</option>
-    <option value="volume2/issue1">Volume 2 — Issue 1</option>
-  </select>
-
-  <div id="flipbook"></div>
+  <div id="flipbook">
+    <div class="page"><img src="https://via.placeholder.com/400x500?text=Page+1"></div>
+    <div class="page"><img src="https://via.placeholder.com/400x500?text=Page+2"></div>
+    <div class="page"><img src="https://via.placeholder.com/400x500?text=Page+3"></div>
+    <div class="page"><img src="https://via.placeholder.com/400x500?text=Page+4"></div>
+  </div>
 
   <script>
-    function loadIssue(path) {
-      console.log("HEy");
-      const numPages = 6;
-      const flipbook = $('#flipbook');
-
-      // Clear and hide previous content
-      if (flipbook.data('turn')) {
-        flipbook.turn('destroy').html('').hide();
-      } else {
-        flipbook.html('').hide();
-      }
-
-      // Load new pages
-      for (let i = 1; i <= numPages; i++) {
-        const imgURL = `https://raw.githubusercontent.com/AdamRansbotham/LionsRoar/main/papers/${path}/page${i}.jpg`;
-        flipbook.append(`<div class="page"><img src="${imgURL}" alt="Page ${i}"></div>`);
-      }
-
-      // Wait for images to load into DOM
-      setTimeout(() => {
-        flipbook.show().turn({
-          width: 800,
-          height: 500,
-          autoCenter: true,
-          display: 'double',
-          acceleration: true,
-          gradients: true
-        });
-      }, 100); // Let DOM update before initializing
-    }
+    $('#flipbook').turn({
+      width: 800,
+      height: 500,
+      autoCenter: true,
+      display: 'double'
+    });
   </script>
 
 </body>
