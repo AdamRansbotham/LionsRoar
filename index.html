@@ -48,20 +48,6 @@
   </style>
 </head>
 <body>
-
-  <h1>📖 The Lions Roar — Flipbook Archive</h1>
-
-  <select onchange="loadIssue(this.value)">
-    <option value="">Select Volume & Issue</option>
-    <option value="volume1/issue1">Volume 1 — Issue 1</option>
-    <option value="volume1/issue2">Volume 1 — Issue 2</option>
-    <option value="volume2/issue1">Volume 2 — Issue 1</option>
-  </select>
-
-  <div id="flipbook">
-    <!-- Pages will be loaded here -->
-  </div>
-
   <script>
     function loadIssue(path) {
       const numPages = 6; // Change if issues have different page counts
@@ -91,6 +77,20 @@
       });
     }
   </script>
+  <h1>📖 The Lions Roar — Flipbook Archive</h1>
+
+  <select onchange="loadIssue(this.value)">
+    <option value="">Select Volume & Issue</option>
+    <option value="volume1/issue1">Volume 1 — Issue 1</option>
+    <option value="volume1/issue2">Volume 1 — Issue 2</option>
+    <option value="volume2/issue1">Volume 2 — Issue 1</option>
+  </select>
+
+  <div id="flipbook">
+    <!-- Pages will be loaded here -->
+  </div>
+
+  
 
 </body>
 </html>
