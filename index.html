@@ -31,12 +31,12 @@
       width: 400px;
       height: 500px;
       background-color: white;
-      overflow: hidden;
     }
 
     canvas {
       width: 100%;
       height: 100%;
+      display: block;
     }
   </style>
 
@@ -64,40 +64,46 @@
     async function loadIssue(pdfPath) {
       if (!pdfPath) return;
 
-      const flipbook = $('#flipbook');
-      flipbook.html(''); // Clear existing content
-
-      if (flipbook.data('turn')) {
-        flipbook.turn('destroy').remove();
-        flipbook.replaceWith('<div id="flipbook"></div>');
+      const oldFlipbook = $('#flipbook');
+      if (oldFlipbook.data('turn')) {
+        oldFlipbook.turn('destroy').remove();
+        $('<div id="flipbook"></div>').insertAfter('select');
+      } else {
+        oldFlipbook.html('');
       }
 
       const loadingTask = pdfjsLib.getDocument(pdfPath);
       const pdf = await loadingTask.promise;
       const pageCount = pdf.numPages;
-
-      const container = $('#flipbook');
+      const pages = [];
 
       for (let i = 1; i <= pageCount; i++) {
         const page = await pdf.getPage(i);
         const viewport = page.getViewport({ scale: 2 });
+
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
-
         canvas.width = viewport.width;
         canvas.height = viewport.height;
 
         await page.render({ canvasContext: context, viewport }).promise;
 
-        const pageDiv = $('<div class="page"></div>').append(canvas);
-        container.append(pageDiv);
+        const pageDiv = document.createElement('div');
+        pageDiv.className = 'page';
+        pageDiv.appendChild(canvas);
+        pages.push(pageDiv);
+      }
+
+      const flipbook = $('#flipbook');
+      for (const page of pages) {
+        flipbook.append(page);
       }
 
       $('#flipbook').turn({
         width: 800,
         height: 500,
         autoCenter: true,
-        display: 'double',
+        display: 'double'
       });
     }
   </script>
