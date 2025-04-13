@@ -6,7 +6,7 @@
 
   <!-- jQuery and Turn.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/turn.js@4/turn.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/3/turn.min.js"></script>
 
   <!-- PDF.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -59,7 +59,6 @@
     <option value="">Select Volume & Issue</option>
     <option value="volume1/issue1">Volume 1 — Issue 1</option>
     <option value="volume1/issue2">Volume 1 — Issue 2</option>
-    <!-- Add more issues here -->
   </select>
 
   <div id="flipbook"></div>
@@ -75,7 +74,7 @@
 
       async function loadIssue(path) {
         const flipbook = $('#flipbook');
-        flipbook.html(''); // Clear previous pages
+        flipbook.html('');
 
         const pdfUrl = `papers/${path}.pdf`;
 
@@ -100,7 +99,7 @@
             flipbook.append(pageDiv);
           }
 
-          // Re-initialize turn.js
+          // Make sure turn.js is loaded and initialize
           if (flipbook.data('turn')) {
             flipbook.turn('destroy');
           }
@@ -116,7 +115,7 @@
 
         } catch (error) {
           console.error('Error loading PDF:', error);
-          flipbook.html('<p>Failed to load PDF.</p>');
+          alert("PDF failed to load. Check the file path and make sure it's uploaded to the right folder.");
         }
       }
     });
