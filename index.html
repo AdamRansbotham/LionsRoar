@@ -7,7 +7,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.12.313/pdf.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/3/turn.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/turn.js@4/turn.min.js"></script>
 
   <style>
     body {
@@ -32,12 +32,17 @@
 
     canvas {
       width: 100%;
-      height: auto;
+      height: 100%;
     }
 
-    select {
+    select, button {
       font-size: 16px;
-      padding: 5px;
+      padding: 6px 12px;
+      margin: 5px;
+    }
+
+    #nav-buttons {
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -58,6 +63,11 @@
     </select>
   </div>
 
+  <div id="nav-buttons">
+    <button onclick="$('#flipbook').turn('previous')">⬅ Previous</button>
+    <button onclick="$('#flipbook').turn('next')">Next ➡</button>
+  </div>
+
   <div id="flipbook"></div>
 
   <script>
@@ -67,9 +77,9 @@
       const volume = $('#volumeSelect').val();
       const issue = $('#issueSelect').val();
       const pdfUrl = `papers/volume${volume}/issue${issue}.pdf`;
-      console.log(pdfUrl);
+
       const flipbook = $('#flipbook');
-      flipbook.html(''); // Clear existing content
+      flipbook.html(''); // Clear previous pages
 
       try {
         const loadingTask = pdfjsLib.getDocument(pdfUrl);
@@ -93,13 +103,18 @@
           flipbook.append(pageDiv);
         }
 
-        // Re-initialize Turn.js after loading all pages
-        flipbook.turn({
-          width: 800,
-          height: 600,
-          autoCenter: true,
-          display: 'double'
-        });
+        // Initialize flipbook once all pages are loaded
+        setTimeout(() => {
+          if (flipbook.data('turn')) {
+            flipbook.turn('destroy');
+          }
+          flipbook.turn({
+            width: 800,
+            height: 600,
+            autoCenter: true,
+            display: 'double'
+          });
+        }, 100);
 
       } catch (error) {
         console.error("Error loading PDF:", error);
@@ -109,7 +124,6 @@
 
     $('#volumeSelect, #issueSelect').on('change', loadIssue);
 
-    // Load the first issue by default
     window.onload = loadIssue;
   </script>
 
