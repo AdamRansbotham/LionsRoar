@@ -48,13 +48,13 @@
   <div id="controls">
     Volume:
     <select id="volumeSelect">
-      <option value="volume1">1</option>
+      <option value="1">1</option>
     </select>
 
     Issue:
     <select id="issueSelect">
-      <option value="issue1">1</option>
-      <option value="issue2">2</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
     </select>
   </div>
 
@@ -66,7 +66,7 @@
     async function loadIssue() {
       const volume = $('#volumeSelect').val();
       const issue = $('#issueSelect').val();
-      const pdfUrl = `papers/v${volume}/i${issue}.pdf`;
+      const pdfUrl = `papers/volume${volume}/issue${issue}.pdf`;
       console.log(pdfUrl);
       const flipbook = $('#flipbook');
       flipbook.html(''); // Clear existing content
