@@ -1,0 +1,9 @@
+{
+  "Volume 1": {
+    "Issue 1": "papers/volume1/issue1.pdf",
+    "Issue 2": "papers/volume1/issue2.pdf"
+  },
+  "Volume 2": {
+    "Issue 1": "papers/volume2/issue1.pdf"
+  }
+}
